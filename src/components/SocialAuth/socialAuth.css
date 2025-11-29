@@ -1,0 +1,59 @@
+.social-auth {
+  display: flex;
+  margin-bottom: 93px;
+  column-gap: 15px;
+}
+
+.social-auth__register {
+  margin-bottom: 25px;
+}
+
+.social-item {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 17px 20px;
+  border-radius: 15px;
+  background: rgb(247, 246, 250);
+  flex: 1;
+  cursor: pointer;
+}
+
+.social-item img {
+  width: 20px;
+  height: 24px;
+}
+
+.social-item p {
+  color: rgb(93, 90, 103);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 135%;
+}
+
+@media (max-width: 768px) {
+  .social-auth {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .social-item {
+    width: 100%;
+    max-width: 300px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .social-item p {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .social-item img {
+    width: 18px;
+    height: 20px;
+  }
+}

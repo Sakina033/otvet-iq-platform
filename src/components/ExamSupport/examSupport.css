@@ -1,0 +1,79 @@
+.exam-support {
+    padding: 110px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.exam-support-container {
+    width: 100%;
+    max-width: 1200px;
+    
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.exam-support__illustration img {
+    max-width: 100%; 
+    height: auto;
+}
+
+.exam-support__content {
+    padding: 0;
+    max-width: 600px;
+}
+
+.exam-support h6 {
+    margin-bottom: 26px;
+    color: rgb(94, 56, 252);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.exam-support h3 {
+    color: rgb(44, 35, 77);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 46.8px;
+    margin-bottom: 16px;
+}
+
+.exam-support p {
+    color: rgb(93, 90, 103);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 30px;
+}
+
+.exam-support__divider {
+    background: rgb(252, 46, 144);
+    width: 53.5px;
+    height: 3px;
+    margin-bottom: 37px;
+}
+
+@media (max-width: 768px) {
+    .exam-support {
+        padding: 60px 20px;
+    }
+
+    .exam-support-container {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .exam-support h6 {
+        font-size: 18px;
+    }
+
+    .exam-support h3 {
+        font-size: 26px;
+        line-height: 36px;
+    }
+
+    .exam-support__divider {
+        margin: 24px auto;
+    }
+}

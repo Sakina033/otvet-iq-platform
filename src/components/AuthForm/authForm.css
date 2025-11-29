@@ -1,0 +1,32 @@
+.auth-form {
+    padding: 40px 60px 0;
+}
+
+.auth-form__title {
+    margin-bottom: 58px;
+}
+
+.auth-form__subtitle {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 48px;
+}
+
+@media (max-width: 768px) {
+  .auth-form {
+    padding: 30px 20px 0;
+  }
+
+  .auth-form__title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .auth-form__subtitle {
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+  }
+}

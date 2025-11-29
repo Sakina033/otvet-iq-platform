@@ -1,0 +1,36 @@
+.logo {
+  display: flex;
+  padding: 6px 12px 12px;
+  border-radius: 15px;
+  background: rgb(255, 255, 255);
+  max-width: 85px;
+  cursor: pointer;
+}
+
+.logo-otvet {
+  color: #000000;
+  font-size: 24px;
+  font-weight: 700;
+  margin-right: 2px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.logo-iq {
+  color: #5838FC;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    max-width: 60px;
+    padding: 3px 6px 6px 6px;
+  }
+
+  .logo-otvet,
+  .logo-iq {
+    font-size: 16px;
+  }
+}
+

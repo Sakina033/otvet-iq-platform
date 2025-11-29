@@ -1,0 +1,27 @@
+.login-page {
+  background: rgba(88, 56, 252, 0.15);
+  padding: 100px 20px; 
+  min-height: 100vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-page__container {
+  background: rgb(255, 255, 255);
+  border-radius: 15px;
+  width: 100%;
+  max-width: 640px;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: 40px 20px;
+  }
+
+  .login-page__container {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+}

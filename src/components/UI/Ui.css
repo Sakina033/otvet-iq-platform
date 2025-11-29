@@ -1,0 +1,35 @@
+.ui-button {
+  width: 100%; 
+  max-width: 640px; 
+    
+  border: none;
+  border-radius: 15px;
+  background: linear-gradient(180deg, rgb(99, 55, 250) 0%, rgb(151, 53, 243) 100%);
+  padding: 20px 40px;
+  cursor: pointer;
+    
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+    
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.1s ease, opacity 0.2s;
+}
+
+.ui-button:active {
+  transform: scale(0.98);
+}
+
+.ui-button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .ui-button {
+    font-size: 16px;
+    padding: 16px 24px;
+  }
+}

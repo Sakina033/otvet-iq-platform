@@ -1,0 +1,101 @@
+.subscription {
+    padding: 0 20px; 
+    
+    display: flex;
+    justify-content: center; 
+}
+
+.subscription-in {
+    width: 80%;
+    max-width: 1200px;
+    
+    border-radius: 15px;
+    background: var(--Pink, rgba(252, 46, 144, 1));
+    padding: 30px 60px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subscription-in h3 {
+    color: rgba(255, 255, 255, 1);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 125%;
+}
+
+.subscription-subscribe {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.subscription-subscribe p {
+    color: rgba(255, 255, 255, 1);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 135%;
+}
+
+.subscribe-btn {
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 1);
+    padding: 15px 20px;
+
+    color: rgba(0, 0, 0, 1);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 135%;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+}
+
+.subscription_users {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.subscription_avatars {
+    display: flex;
+}
+
+@media (max-width: 900px) {
+    .subscription {
+        padding: 0 30px;
+    }
+
+    .subscription-in {
+        padding: 15px 12px 15px 15px;
+        gap: 15px;
+    }
+
+    .subscription_avatars img {
+        width: 23px;
+        height: 23px;
+    }
+
+    .subscription-subscribe {
+        width: 300px;
+    }
+
+    .subscription-in h3 {
+        font-size: 15px;
+    }
+
+    .subscription-subscribe p {
+        font-size: 12px;
+    }
+
+    .subscription_users {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .subscribe-btn {
+        padding: 10px;
+    }
+}
