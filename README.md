@@ -6,7 +6,7 @@
 * **Frontend:** React 18, React Hooks.
 * **State Management:** Redux Toolkit (AsyncThunks, Slices).
 * **Backend as a Service:** Firebase (Firestore Database, Authentication).
-* **AI Integration:** Google Gemini API (модель gemini-1.5-flash).
+* **AI Integration:** Google Gemini API (модель gemini-2.5-pro).
 * **Styling:** CSS Modules, Flexbox/Grid, Responsive Design.
 
 ### 🚀 Реализованный функционал
