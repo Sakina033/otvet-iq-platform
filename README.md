@@ -1,70 +1,21 @@
-# Getting Started with Create React App
+# 🧠 Otvet IQ — Образовательная AI-платформа
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Платформа вопросов и ответов (Q&A), интегрированная с генеративным искусственным интеллектом Google Gemini. Пользователи могут задавать вопросы, обмениваться знаниями и получать мгновенные ответы от нейросети.
 
-## Available Scripts
+### 🔗 Стек технологий
+* **Frontend:** React 18, React Hooks.
+* **State Management:** Redux Toolkit (AsyncThunks, Slices).
+* **Backend as a Service:** Firebase (Firestore Database, Authentication).
+* **AI Integration:** Google Gemini API (модель gemini-1.5-flash).
+* **Styling:** CSS Modules, Flexbox/Grid, Responsive Design.
 
-In the project directory, you can run:
+### 🚀 Реализованный функционал
+1.  **Умные ответы:** Интеграция с LLM позволяет пользователям получать мгновенный ответ на вопрос без участия модераторов.
+2.  **Авторизация:** Безопасный вход через Google (Firebase Auth).
+3.  **Real-time база данных:** Вопросы и ответы сохраняются и синхронизируются в облаке Firestore.
+4.  **Архитектура:** Масштабируемая структура проекта (разделение на Pages, Components, Store, Services).
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 💡 Особенности реализации
+* Реализована защита API ключей через переменные окружения (.env).
+* Оптимистичный UI: интерфейс реагирует мгновенно, обработка данных идет в фоне.
+* Адаптивная верстка под мобильные устройства и планшеты.
