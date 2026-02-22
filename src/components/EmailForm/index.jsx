@@ -1,16 +1,16 @@
 import React from 'react'
 import './emailForm.css'
 
-const EmailForm = ({emailBtn}) => {
+const EmailForm = ({ emailBtn, onUnsupported }) => {
   const submitForm = (event) => {
     event.preventDefault();
-    alert("Вход по email пока в разработке, используйте Google")
+    onUnsupported('E-mail');
   }
   
   return (
-    <form className='email-form'>
+    <form className='email-form' onSubmit={submitForm}>
       <input className='email-input' type='email' placeholder='Введите E-mail' />
-      <button type='submit' onClick={submitForm} className="email-button">{emailBtn}</button>
+      <button type='submit' className="email-button">{emailBtn}</button>
     </form>
   )
 }

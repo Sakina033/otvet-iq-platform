@@ -1,23 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './header.css'
 import loginIcon from '../../assets/icons/loginIcon.svg'
 import searchIcon from '../../assets/icons/searchIcon.svg'
-import question from '../../assets/icons/question.svg'
 import Logo from '../Logo'
 import useNavigateTo from '../../hooks/useNavigateTo'
 import { signOut } from 'firebase/auth'
 import { auth } from '../../firebase/firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, closeModal } from '../../store/slices/uiSlice'
-import { addQuestionToFirestore, generateAIAnswer } from '../../store/slices/questionsSlice';
+import { setSearchQuery } from '../../store/slices/questionsSlice'
 
 const Header = () => {
-  const { goToLogin, goHome, goQuestionPage } = useNavigateTo();
+  const { goToLogin, goHome, goAllQuestionsPage, goProfilePage } = useNavigateTo();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [questionText, setQuestionText] = useState('');
+  
   const showModal = useSelector((state) => state.ui.showModal);
-  const loading = useSelector((state) => state.questions.loading);
+  const searchQuery = useSelector(state => state.questions.searchQuery || "");
   const dispatch = useDispatch();
+  
+  const profileRef = useRef(null);
 
   const getUserFromLS = () => {
     try {
@@ -30,11 +31,32 @@ const Header = () => {
   
   const user = getUserFromLS();
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogoClick = () => {
+    if (user) {
+      goAllQuestionsPage()
+    } else {
+      goHome()
+    }
+  }
+
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
         localStorage.removeItem("user");
-        goHome();
+        goHome(); 
       })
       .catch((error) => {
         console.error("Ошибка выхода:", error.message);
@@ -45,54 +67,38 @@ const Header = () => {
     setMenuOpen(prev => !prev);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && questionText.trim()) {
-      if(!user) {
-        dispatch(openModal());
-        setQuestionText('');
-        return;
-      }
-
-      const newPost = {
-        text: questionText.trim(),
-        date: new Date().getTime(),
-        author: user ? user.displayName : "Аноним",
-        avatar: user?.photoURL || null,
-      };
-
-      dispatch(addQuestionToFirestore(newPost))
-      .unwrap()
-      .then(() => {
-         dispatch(generateAIAnswer(questionText.trim()));
-      })
-      .catch(err => console.error("Ошибка добавления вопроса:", err));
-      
-      goQuestionPage();
-      setQuestionText('');
-    }
-  };
-
   return (
     <header className='header'>
       <div className='header-container'>
         <div className='header__logo-search'>
-          <Logo navigateTo={goHome} />
-          <div className='header__search'>
+          <Logo navigateTo={handleLogoClick} />
+          <div className="header__search">
             <img src={searchIcon} alt="search" />
             <input 
-            type='text' 
-            placeholder={ loading ? "Отправка..." : user ? 'Задай свой вопрос...' : 'Войдите, чтобы задать вопрос'} 
-            value={questionText}
-            onChange={(e) => setQuestionText(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={loading}
-            />
+              type='text' 
+              placeholder={user ? "Поиск по вопросам..." : "Начать общение"}
+              value={user ? searchQuery : ""}
+              readOnly={!user}
+              onClick={() => {
+                if (!user) dispatch(openModal());
+              }}
+              onChange={(e) => {
+                if (!user) {
+                  dispatch(openModal());
+                  return;
+                }
+                dispatch(setSearchQuery(e.target.value));
+                if (window.location.pathname !== '/questions') {
+                  goAllQuestionsPage();
+                }
+              }}
+           />
           </div>
         </div>
 
         {showModal && (
           <div className="modal-overlay" onClick={() => dispatch(closeModal())}>
-            <div className="modal">
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
               <h2>Войдите в аккаунт</h2>
               <p>Чтобы задать вопрос, нужно войти или зарегистрироваться.</p>
               <div className="modal-buttons">
@@ -105,7 +111,7 @@ const Header = () => {
       
         <div className="header__in">
           {user ? (
-            <div className='header__profile' onClick={toggleMenu}>
+            <div className='header__profile' ref={profileRef} onClick={toggleMenu}>
               <img src={user.photoURL} alt='avatar' className='header__avatar' />
               <p className='header__name'>
                 {user.displayName}
@@ -113,7 +119,10 @@ const Header = () => {
 
               {menuOpen && (
                 <div className='header__dropdown'>
-                  <button className='header__logout-btn' onClick={handleLogout}>
+                  <button className='header__dropdown-item' onClick={goProfilePage}>
+                    Мои вопросы
+                  </button>
+                  <button className='header__dropdown-item header__logout-btn' onClick={handleLogout}>
                     Выйти
                   </button>
                 </div>
@@ -125,10 +134,6 @@ const Header = () => {
               Войти
             </button>
           )}
-
-          <div className="header__question" onClick={goQuestionPage}>
-            <img src={question} alt="Question page" />
-          </div>
         </div>
       </div>
     </header>

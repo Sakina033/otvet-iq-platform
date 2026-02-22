@@ -3,16 +3,13 @@ import './footer.css'
 import { Link } from 'react-router-dom';
 import Logo from '../Logo';
 import AppLinks from './AppLinks';
-import useNavigateTo from '../../hooks/useNavigateTo';
 
 const Footer = () => {
-    const {goHome} = useNavigateTo();
-
   return (
     <footer className='footer'>
         <div className='footer-container'>
         <div className="footer__logo">
-            <Logo navigateTo={goHome} />
+            <Logo />
         </div>
           <div className="footer__nav">
               <ul>

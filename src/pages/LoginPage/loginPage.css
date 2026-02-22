@@ -1,7 +1,7 @@
 .login-page {
   background: rgba(88, 56, 252, 0.15);
   padding: 100px 20px; 
-  min-height: 100vh; 
+  max-height: 100%; 
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addDoc,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -8,9 +9,10 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  updateDoc
 } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { getGeminiResponse } from "../../utils/gemini";
+import { getGeminiResponse } from "../../utils/gemini"; 
 
 // Добавление вопроса
 export const addQuestionToFirestore = createAsyncThunk(
@@ -20,11 +22,15 @@ export const addQuestionToFirestore = createAsyncThunk(
       const docRef = await addDoc(collection(db, "questions"), {
         ...questionData,
         createdAt: serverTimestamp(),
+        conversation: [
+          {role: "user", text: questionData.text}
+        ]
       });
 
       return { 
         id: docRef.id, 
         ...questionData,
+        conversation: [{role: "user", text: questionData.text}],
         createdAt: new Date().getTime()
       };
     } catch (error) {
@@ -71,21 +77,55 @@ export const fetchQuestionsFromFirestore = createAsyncThunk(
   }
 );
 
-// Генерации ответа от ИИ
+// Генерация ответа от ИИ (Первый вопрос)
 export const generateAIAnswer = createAsyncThunk(
   "questions/generateAIAnswer",
-  async (userQuestionText, { dispatch }) => {
-    const aiText = await getGeminiResponse(userQuestionText);
+  async ({ questionId, userQuestionText }, { rejectWithValue }) => {
+    try {
+      const conversationArray = [{ role: "user", text: userQuestionText }];
+      const aiText = await getGeminiResponse(conversationArray);
+      
+      const questionRef = doc(db, "questions", questionId)
+    
+      await updateDoc(questionRef, {
+        conversation: arrayUnion({
+          role: "model",
+          text: aiText
+        })
+      })
 
-    const aiPost = {
-      text: aiText,
-      date: new Date().getTime(),
-      author: "Gemini AI ✨",
-      avatar: "https://cdn-icons-png.flaticon.com/512/4712/4712027.png", 
-      isAi: true 
-    };
+      return {questionId, aiText}
+    } catch (error) {
+      return rejectWithValue(error.message);
+    } 
+});
 
-    await dispatch(addQuestionToFirestore(aiPost));
+// Продолжение диалога
+export const replyToQuestion = createAsyncThunk(
+  "questions/replyToQuestion",
+  async ({ questionId, replyText }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const question = state.questions.questions.find(q => q.id === questionId);
+      
+      const currentConversation = [...question.conversation, { role: "user", text: replyText }];
+
+      const questionRef = doc(db, "questions", questionId);
+      
+      await updateDoc(questionRef, {
+        conversation: arrayUnion({ role: "user", text: replyText })
+      });
+
+      const aiText = await getGeminiResponse(currentConversation);
+
+      await updateDoc(questionRef, {
+        conversation: arrayUnion({ role: "model", text: aiText })
+      });
+
+      return { questionId, replyText, aiText };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -93,15 +133,21 @@ const initialState = {
   questions: [],
   loading: false,
   error: null,
+  searchQuery: "",
 };
 
 const questionsSlice = createSlice({
   name: "questions",
   initialState,
 
+  reducers: {
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload;
+    }
+  },
+
   extraReducers: (builder) => {
     builder
-      // Добавление
       .addCase(addQuestionToFirestore.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -114,13 +160,11 @@ const questionsSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Удаление
       .addCase(deleteQuestionFromFirestore.fulfilled, (state, action) => {
         state.questions = state.questions.filter(
           (q) => q.id !== action.payload
         );
       })
-      // Подгрузка всех вопросов
       .addCase(fetchQuestionsFromFirestore.pending, (state) => {
         state.loading = true;
       })
@@ -131,8 +175,28 @@ const questionsSlice = createSlice({
       .addCase(fetchQuestionsFromFirestore.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(generateAIAnswer.fulfilled, (state, action) => {
+        const { questionId, aiText } = action.payload;
+        const question = state.questions.find(q => q.id === questionId);
+        if (question) {
+          if (!question.conversation) question.conversation = [];
+          question.conversation.push({
+            role: "model",
+            text: aiText
+          });
+        }
+      })
+      .addCase(replyToQuestion.fulfilled, (state, action) => {
+        const { questionId, replyText, aiText } = action.payload;
+        const question = state.questions.find(q => q.id === questionId);
+        if (question && question.conversation) {
+          question.conversation.push({ role: "user", text: replyText });
+          question.conversation.push({ role: "model", text: aiText });
+        }
+      })
   },
 });
 
+export const { setSearchQuery } = questionsSlice.actions;
 export default questionsSlice.reducer;

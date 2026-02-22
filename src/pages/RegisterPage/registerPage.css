@@ -1,6 +1,9 @@
 .register-page {
     background: rgba(88, 56, 252, 0.15);
     padding: 100px 320px;
+    display: flex;
+    justify-content: center;
+    max-height: 100%;
 }
 
 .register-page__container {

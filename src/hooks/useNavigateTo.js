@@ -27,6 +27,14 @@ const useNavigateTo = () => {
     navigate("/questionPage");
   };
 
+  const goAllQuestionsPage = () => {
+    navigate("/allquestions");
+  };
+
+  const goProfilePage = () => {
+    navigate('/profile');
+  }
+
   return {
     goTo,
     goToLogin,
@@ -34,6 +42,8 @@ const useNavigateTo = () => {
     goHome,
     goMainContent,
     goQuestionPage,
+    goAllQuestionsPage,
+    goProfilePage,
   };
 };
 

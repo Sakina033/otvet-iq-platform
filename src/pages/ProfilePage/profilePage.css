@@ -1,0 +1,145 @@
+.profile-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.back-to-feed-btn {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    color: #6337FA;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 0;
+    transition: opacity 0.2s;
+    margin-left: -300px;
+}
+
+.back-to-feed-btn:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
+.profile-header {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+    border: 1px solid #EAEAEA;
+}
+
+.profile-cover {
+    height: 90px;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e2e8f0 100%);
+    border-bottom: 1px solid #eef2ff;
+}
+
+.profile-avatar-big {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid #ffffff; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+    object-fit: cover;
+    margin-bottom: 12px;
+    background-color: #fff;
+}
+
+.profile-info {
+    padding: 0 30px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -50px;
+}
+
+.profile-info h2 {
+    color: #2C234D;
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.profile-info p {
+    color: #888;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.profile-stats {
+    background: #f4f6ff;
+    color: #6337FA;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.profile-title {
+    color: #2C234D;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+.profile-error {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.back-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #6337FA;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .profile-page {
+        padding: 20px 10px;
+    }
+
+    .back-to-feed-btn {
+        font-size: 14px;
+        margin-left: 0;
+    }
+
+    .profile-cover {
+        height: 100px;
+    }
+
+    .profile-avatar-big {
+        width: 90px;
+        height: 90px;
+        border-width: 3px;
+    }
+
+    .profile-info {
+        padding: 0 20px 20px;
+        margin-top: -45px;
+    }
+
+    .profile-info h2 {
+        font-size: 1.3rem;
+    }
+
+    .profile-stats {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    .profile-title {
+        font-size: 1.1rem;
+    }
+}

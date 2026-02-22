@@ -1,39 +1,70 @@
-import React from 'react';
-import './question.css'
-import author from '../../assets/images/author.png';
+import React, { useEffect } from 'react';
+import './question.css';
 import QuestionItem from './QuestionItem';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchQuestionsFromFirestore } from '../../store/slices/questionsSlice';
 
-const Question = () => {
+const QuestionList = ({ activeSort }) => {
+  const dispatch = useDispatch();
+  
   const questions = useSelector(state => state.questions.questions);
   const loading = useSelector(state => state.questions.loading);
+  const searchQuery = useSelector(state => state.questions.searchQuery || "");
+  
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  if (loading) {
-    return <div className="loading"><h2>Загрузка вопросов...</h2></div>
+  useEffect(() => {
+    dispatch(fetchQuestionsFromFirestore());
+  }, [dispatch]);
+
+  if (loading && questions.length === 0) {
+    return <div className="loading"><h2>Загрузка...</h2></div>;
   }
 
   if (!questions || questions.length === 0) {
-    return <div className="no-questions"><h1>Вопросов пока нет</h1></div>;
+    return <div className="no-questions"><h3>Пока пусто! Задай первый вопрос! 🚀</h3></div>;
+  }
+
+  let sortedQuestions = [...questions]; 
+
+  if (searchQuery.trim() !== '') {
+    sortedQuestions = sortedQuestions.filter(q => 
+      q.text.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  if (activeSort === 'my') {
+    sortedQuestions = sortedQuestions.filter(q => user && q.author === user.displayName);
+  } 
+  else if (activeSort === 'popular') {
+    sortedQuestions.sort((a, b) => {
+      const aLen = a.conversation ? a.conversation.length : 0;
+      const bLen = b.conversation ? b.conversation.length : 0;
+      return bLen - aLen; 
+    });
   }
 
   return (
-    <div className='question'>
-      {questions[0] && (
-        <div className="question__author">
-          <img src={questions[0].avatar || author} alt="author" />
-          <h3>{questions[0].author}</h3>
+    <div className='question-list'>
+      {sortedQuestions.length === 0 ? (
+        <div className="no-questions">
+          <h3>Ничего не найдено 🕵️‍♀️</h3>
+          <p>Попробуй изменить запрос или категорию.</p>
         </div>
+      ) : (
+        sortedQuestions.map((q) => (
+          <QuestionItem 
+              key={q.id} 
+              id={q.id}
+              date={q.date || q.createdAt} 
+              author={q.author} 
+              avatar={q.avatar} 
+              conversation={q.conversation} 
+          />
+        ))
       )}
-      <div className="question_items">
-        {questions.map((q, index) => (
-          <div key={q.id}>
-           <QuestionItem text={q.text} date={q.date} id={q.id}/>
-           {index < questions.length - 1 && <hr />}
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
 
-export default Question;
+export default QuestionList;

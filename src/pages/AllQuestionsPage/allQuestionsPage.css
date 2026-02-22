@@ -1,0 +1,112 @@
+.all-questions-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: flex;
+    gap: 80px;
+    align-items: flex-start;
+}
+
+.main-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-input-wrapper {
+    border: 1.5px solid #6337FA;
+    box-shadow: 0 0 2px #6337FA;
+    border-radius: 15px;
+    background: rgb(255, 255, 255);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.chat-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: rgb(44, 35, 77);
+}
+
+.chat-input::placeholder {
+    color: #999;
+}
+
+.chat-input-wrapper img {
+    width: 34px;
+    height: 34px;
+}
+
+.sidebar-right {
+    width: 280px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 25px;
+    border: 1.5px solid #EAEAEA;
+    position: sticky;
+    top: 20px;
+}
+
+.sidebar-right h3 {
+    margin-bottom: 20px;
+    color: rgb(44, 35, 77);
+    font-size: 1.2rem;
+}
+
+.sidebar-right ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-right li {
+    padding: 12px 0;
+    color: rgb(93, 90, 103);
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.sidebar-right li:last-child {
+    border-bottom: none;
+}
+
+.sidebar-right li:hover, .active-sort {
+    color: #6337FA !important;
+}
+
+@media (max-width: 768px) {
+    .all-questions-page {
+        flex-direction: column-reverse;
+        padding: 20px 10px;
+        gap: 20px;
+    }
+    
+    .sidebar-right {
+        width: 100%;
+        position: static;
+        padding: 15px;
+    }
+
+    .sidebar-right h3 {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    .chat-input-wrapper {
+        padding: 12px 15px;
+        margin-bottom: 20px;
+    }
+
+    .chat-input-wrapper img {
+        width: 24px;
+        height: 24px;
+    }
+}

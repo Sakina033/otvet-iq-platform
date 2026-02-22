@@ -1,44 +1,21 @@
-import React, { useState } from 'react'
 import './mainContent.css'
 import searchIcon from '../../assets/icons/searchIcon.svg'
 import arrowIcon from '../../assets/icons/arrowIcon.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal, closeModal } from '../../store/slices/uiSlice'
 import useNavigateTo from '../../hooks/useNavigateTo'
-import { addQuestionToFirestore, generateAIAnswer } from '../../store/slices/questionsSlice'
 
 const MainContent = () => {
-  const { goQuestionPage, goToLogin } = useNavigateTo();
+  const { goAllQuestionsPage, goToLogin } = useNavigateTo();
   const user = JSON.parse(localStorage.getItem("user"));
-  const [questionText, setQuestionText] = useState('');
   const showModal = useSelector((state) => state.ui.showModal);
-  const loading = useSelector((state) => state.questions.loading);
   const dispatch = useDispatch();
   
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && questionText.trim()) {
-      if(!user){
-        dispatch(openModal());
-        setQuestionText('');
-        return;
-      }
-
-      const newPost = {
-        text: questionText.trim(),
-        date: new Date().getTime(),
-        author: user ? user.displayName : 'Аноним',
-        avatar: user?.photoURL || null,
-      };
-
-      dispatch(addQuestionToFirestore(newPost))
-      .unwrap()
-      .then(() => {
-          dispatch(generateAIAnswer(questionText.trim()));
-      })
-      .catch(err => console.error("Ошибка добавления вопроса:", err));
-
-      goQuestionPage();
-      setQuestionText('');
+  const handleStartChat = () => {
+    if (user) {
+      goAllQuestionsPage();
+    } else {
+      dispatch(openModal());
     }
   }
 
@@ -47,16 +24,12 @@ const MainContent = () => {
         <div className="main-content__container">
             <h1>Узнай ответы на вопросы у AI-бота</h1>
             <p>В этом сообществе, основанном на знаниях, участвует свыше миллиона учеников, студентов и преподавателей и ai-бот. Благодаря такому объединению умов, здесь вы найдете отличные ответы даже на самые сложные вопросы.</p>
-            <div className="main-content__input">
-                <img src={searchIcon} alt="Задай свой вопрос" />
-                <input 
-                type="text" 
-                placeholder={ loading ? "Отправка..." : user ? 'Задай свой вопрос...' : 'Войдите, чтобы задать вопрос'}
-                value={questionText}
-                onChange={(e) => setQuestionText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={loading}
-                />
+            <div className="main-content__actions">
+                <button className='start-chat-btn' onClick={handleStartChat}>
+                  <img src={searchIcon} alt="Задай свой вопрос" />
+                  {user ? 'Перейти в чат' : 'Начать общение'}
+                  <img src={arrowIcon} alt="arrow" />
+                </button>
             </div>
         </div>
         <div className="main-content__item">
