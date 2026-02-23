@@ -2,10 +2,8 @@ import React from 'react'
 import Google from '../../assets/icons/google.svg'
 import { signInWithPopup } from 'firebase/auth'
 import {auth, provider} from '../../firebase/firebase'
-import useNavigateTo from '../../hooks/useNavigateTo'
 
 const GoogleAuth = () => {
-  const {goAllQuestionsPage} = useNavigateTo();
   
   const handleGoogleAuth = async () => {
   try {
@@ -20,7 +18,8 @@ const GoogleAuth = () => {
       uid: user.uid
     }));
 
-    goAllQuestionsPage();
+    window.location.href = '/allQuestions';
+
   } catch (error) {
     console.error('Ошибка входа', error.message);
   }

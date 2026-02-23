@@ -7,21 +7,30 @@ export const getGeminiResponse = async (conversationArray) => {
   try {
     const model = genAI.getGenerativeModel({ 
       model: "gemini-2.5-flash",
-      systemInstruction: "Ты — умный помощник на сайте Otvet IQ. Твоя задача — давать полезные ответы. ВАЖНО: НИКОГДА не здоровайся. НИКОГДА не пиши 'Как искусственный интеллект'. Отвечай живо, используй эмодзи. Пиши не более 3-4 предложений."
+      systemInstruction: "Ты — умный помощник на сайте Otvet IQ. В чате могут писать разные пользователи, их сообщения будут начинаться с 'Имя: текст'. Твоя задача: 1) Если к обсуждению присоединился НОВЫЙ человек, один раз приветливо обратись к нему по имени. 2) Если тот же человек пишет следующее сообщение подряд — НЕ здоровайся снова, отвечай сразу по делу. 3) НИКОГДА не пиши 'Как искусственный интеллект'. Отвечай живо, используй эмодзи. Пиши не более 5-6 предложений."
     });
 
-    const historyData = conversationArray.slice(0, -1).map(msg => ({
-      role: msg.role === 'model' ? 'model' : 'user',
-      parts: [{ text: msg.text }],
-    }));
+    const historyData = conversationArray.slice(0, -1).map(msg => {
+      const textWithContext = msg.authorName && msg.role === 'user' 
+        ? `${msg.authorName}: ${msg.text}` 
+        : msg.text;
 
-    const lastMessage = conversationArray[conversationArray.length - 1].text;
+      return {
+        role: msg.role === 'model' ? 'model' : 'user',
+        parts: [{ text: textWithContext }],
+      };
+    });
+
+    const lastMsg = conversationArray[conversationArray.length - 1];
+    const lastMessageText = lastMsg.authorName && lastMsg.role === 'user'
+      ? `${lastMsg.authorName}: ${lastMsg.text}`
+      : lastMsg.text;
 
     const chat = model.startChat({
       history: historyData,
     });
 
-    const result = await chat.sendMessage(lastMessage);
+    const result = await chat.sendMessage(lastMessageText);
     const response = await result.response;
     return response.text();
     

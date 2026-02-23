@@ -103,26 +103,34 @@ export const generateAIAnswer = createAsyncThunk(
 // Продолжение диалога
 export const replyToQuestion = createAsyncThunk(
   "questions/replyToQuestion",
-  async ({ questionId, replyText }, { getState, rejectWithValue }) => {
+  async ({ questionId, replyText, currentUser }, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const question = state.questions.questions.find(q => q.id === questionId);
       
-      const currentConversation = [...question.conversation, { role: "user", text: replyText }];
+      const userMessage = { 
+        role: "user", 
+        text: replyText,
+        authorName: currentUser.displayName,
+        authorPhoto: currentUser.photoURL || null
+      };
 
       const questionRef = doc(db, "questions", questionId);
       
       await updateDoc(questionRef, {
-        conversation: arrayUnion({ role: "user", text: replyText })
+        conversation: arrayUnion(userMessage)
       });
-
+      
+      const currentConversation = [...question.conversation, userMessage];
       const aiText = await getGeminiResponse(currentConversation);
 
+      const aiMessage = { role: "model", text: aiText };
+      
       await updateDoc(questionRef, {
-        conversation: arrayUnion({ role: "model", text: aiText })
+        conversation: arrayUnion(aiMessage)
       });
 
-      return { questionId, replyText, aiText };
+      return { questionId, userMessage, aiMessage };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -188,11 +196,11 @@ const questionsSlice = createSlice({
         }
       })
       .addCase(replyToQuestion.fulfilled, (state, action) => {
-        const { questionId, replyText, aiText } = action.payload;
+        const { questionId, userMessage, aiMessage } = action.payload;
         const question = state.questions.find(q => q.id === questionId);
         if (question && question.conversation) {
-          question.conversation.push({ role: "user", text: replyText });
-          question.conversation.push({ role: "model", text: aiText });
+          question.conversation.push(userMessage);
+          question.conversation.push(aiMessage);
         }
       })
   },

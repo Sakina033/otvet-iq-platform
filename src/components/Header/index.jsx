@@ -56,7 +56,7 @@ const Header = () => {
     signOut(auth)
       .then(() => {
         localStorage.removeItem("user");
-        goHome(); 
+        window.location.href = '/';
       })
       .catch((error) => {
         console.error("Ошибка выхода:", error.message);

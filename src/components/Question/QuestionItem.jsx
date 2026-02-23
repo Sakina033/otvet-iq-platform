@@ -12,17 +12,24 @@ const QuestionItem = ({ id, date, author, avatar, conversation }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [tempUserMsg, setTempUserMsg] = useState('');
 
+  const currentUserString = localStorage.getItem("user");
+  const currentUser = currentUserString ? JSON.parse(currentUserString) : {};
+
   const handleDelete = () => dispatch(deleteQuestionFromFirestore(id));
 
   const handleReplySubmit = (e) => {
     if (e.key === 'Enter' && replyText.trim()) {
       const textToSend = replyText.trim();
-      setReplyText(''); 
-      setTempUserMsg(textToSend); 
-      setIsTyping(true); 
-      setIsOpen(true); 
+      setReplyText('');
+      setTempUserMsg(textToSend);
+      setIsTyping(true);
+      setIsOpen(true);
 
-      dispatch(replyToQuestion({ questionId: id, replyText: textToSend }))
+      dispatch(replyToQuestion({ 
+        questionId: id, 
+        replyText: textToSend,
+        currentUser: currentUser 
+      }))
         .unwrap()
         .then(() => {
           setIsTyping(false);
@@ -55,9 +62,12 @@ const QuestionItem = ({ id, date, author, avatar, conversation }) => {
              <span className="post-author">{author}</span>
              <span className="post-date">{formattedDate}</span>
           </div>
-          <div className="remove_btn" onClick={handleDelete}>
-             <img src={removeQ} alt="delete" />
-          </div>
+          
+          {currentUser.displayName === author && (
+            <div className="remove_btn" onClick={handleDelete}>
+               <img src={removeQ} alt="delete" />
+            </div>
+          )}
       </div>
       <div className="post-content">
         <p>{mainQuestion.text}</p>
@@ -95,8 +105,8 @@ const QuestionItem = ({ id, date, author, avatar, conversation }) => {
                         <span className="reply-author ai-badge">✨ AI-бот</span>
                     ) : (
                         <div className="reply-user-info">
-                            <img src={avatar || defaultAvatar} alt="mini-avatar" className="mini-reply-avatar" />
-                            <span className="reply-author">{author}</span>
+                            <img src={reply.authorPhoto || avatar || defaultAvatar} alt="mini-avatar" className="mini-reply-avatar" />
+                            <span className="reply-author">{reply.authorName || author}</span>
                         </div>
                     )}
                   </div>
@@ -110,8 +120,8 @@ const QuestionItem = ({ id, date, author, avatar, conversation }) => {
                 <div className="reply-item user-reply">
                   <div className="reply-header">
                      <div className="reply-user-info">
-                        <img src={avatar || defaultAvatar} alt="mini-avatar" className="mini-reply-avatar" />
-                        <span className="reply-author">{author}</span>
+                        <img src={currentUser.photoURL || defaultAvatar} alt="mini-avatar" className="mini-reply-avatar" />
+                        <span className="reply-author">{currentUser.displayName || 'Аноним'}</span>
                      </div>
                   </div>
                   <div className="reply-content">
